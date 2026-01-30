@@ -77,5 +77,11 @@ NeuralNetwork Train(NeuralNetwork nn, int epochs, double learningRate, Matrix<do
 
 NeuralNetwork FeedForward(NeuralNetwork nn, Vector<double> inputRow)
 {
+    // see the input values for the first layer
+    for (int i = 0; i  < nn.Layers[0].Neurons.Count; i++)
+    {
+        nn.Layers[0].Neurons[i].Input = inputRow[i];
+        nn.Layers[0].Neurons[i].Output = inputRow[i];
+    }
     return nn;
 }
