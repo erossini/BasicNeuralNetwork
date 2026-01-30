@@ -12,5 +12,10 @@ namespace BasicNeuralNetwork.Activations
             // no activation function applied
             return x;
         }
+
+        public double Derivative(double x)
+        {
+            return 1;
+        }
     }
 }

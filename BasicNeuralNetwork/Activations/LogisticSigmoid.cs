@@ -12,5 +12,11 @@ namespace BasicNeuralNetwork.Activations
             // compress the input it receives into outputs between 0 and 1 (0.5 output is 1
             return 1 / (1 + Math.Exp(-x));
         }
+
+        public double Derivative(double x)
+        {
+            var sigmoid = Activate(x);
+            return sigmoid * (1 - sigmoid);
+        }
     }
 }

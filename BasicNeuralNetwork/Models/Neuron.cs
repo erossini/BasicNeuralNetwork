@@ -13,6 +13,7 @@ namespace BasicNeuralNetwork.Models
         public Guid Id { get; set; }
         public IActivationFunction? Activation { get; set; }
         public double Bias { get; set; }
+        public double LocalDelta { get; set; }
         public double Input { get; set; }
         public double Output { get; set; }
         public List<Connection>? Connections { get; set; }
