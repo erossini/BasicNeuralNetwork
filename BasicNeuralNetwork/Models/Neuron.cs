@@ -17,12 +17,15 @@ namespace BasicNeuralNetwork.Models
         public double Output { get; set; }
         public List<Connection>? Connections { get; set; }
 
-        public Neuron(IActivationFunction activation)
+        public Neuron(IActivationFunction activation, int numOfNeuronsInNextLayer)
         {
             Id = Guid.NewGuid();
             Activation = activation;
             Bias = 0;
             Connections = new List<Connection>();
+
+            for (int i = 0; i < numOfNeuronsInNextLayer; i++)
+                Connections.Add(new Connection());
         }
     }
 }

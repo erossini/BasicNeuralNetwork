@@ -41,7 +41,7 @@ namespace BasicNeuralNetwork.Models
 
             Neurons = new List<Neuron>();
             for (int i = 0; i < numOfNeurons; i++)
-                Neurons.Add(new Neuron(activationFunction));
+                Neurons.Add(new Neuron(activationFunction, numOfNeuronsInNextLayer));
         }
     }
 }
