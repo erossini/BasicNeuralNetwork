@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BasicNeuralNetwork.Activations;
+using BasicNeuralNetwork.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -26,5 +28,20 @@ namespace BasicNeuralNetwork.Models
         /// </summary>
         /// <value><c>true</c> if this instance is output layer; otherwise, <c>false</c>.</value>
         public bool IsOutputLayer { get; set; }
+
+        public Layer(int numOfNeurons, int numOfNeuronsInNextLayer, bool isInputLayer)
+        {
+            if (numOfNeuronsInNextLayer == 0)
+                IsOutputLayer = true;
+
+            IsInputLayer = isInputLayer;
+
+            IActivationFunction activationFunction = IsOutputLayer ? new LogisticSigmoid() : new Tanh();
+            activationFunction = IsInputLayer ? new NoActivation() : activationFunction;
+
+            Neurons = new List<Neuron>();
+            for (int i = 0; i < numOfNeurons; i++)
+                Neurons.Add(new Neuron(activationFunction));
+        }
     }
 }

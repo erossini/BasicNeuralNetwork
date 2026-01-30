@@ -32,9 +32,15 @@ namespace BasicNeuralNetwork.Models
         /// Initializes a new instance of the <see cref="NeuralNetwork"/> class.
         /// </summary>
         /// <param name="numOfLayers">The number of layers.</param>
-        public NeuralNetwork(int numOfLayers) {
+        public NeuralNetwork(List<int> numOfNeuronsInEachLayer) {
             Layers = new List<Layer>();
-            Enumerable.Range(0, numOfLayers).ToList().ForEach(_ => Layers!.Add(new Layer()));
+            Layers = numOfNeuronsInEachLayer.Select((neuronsInLayer, index) => {
+                // determine the number of neurons in the next layer (if it exists)
+                int neuronsInNextLayer = (index < numOfNeuronsInEachLayer.Count - 1) ? numOfNeuronsInEachLayer[index + 1] : 0;
+                bool isInputLayer = index == 0;
+
+                return new Layer(neuronsInLayer, neuronsInNextLayer, isInputLayer);
+            }).ToList();
         }
     }
 }
