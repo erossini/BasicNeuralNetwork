@@ -1,2 +1,2 @@
 # BasicNeuralNetwork
-How to create basic Neural Network (NN) with C#
+How to create a basic Neural Network (NN) with C#
