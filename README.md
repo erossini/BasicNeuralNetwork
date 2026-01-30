@@ -1,5 +1,25 @@
-# Basic Neural Network (NN) using C#
-How to create a basic Neural Network (NN) with C#
+# Basic Neural Network (NN) Implementation using C#
+
+This document explains in detail how this C# codebase implements a **feedforward neural network** with **backpropagation** for supervised learning. The example program trains the network to behave like a **NAND logic gate**.
+
+---
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Project Structure](#project-structure)
+3. [Core Models](#core-models)
+4. [Activation Functions](#activation-functions)
+5. [Network Construction and Wiring](#network-construction-and-wiring)
+6. [Training Algorithm](#training-algorithm)
+7. [Mathematical Details](#mathematical-details)
+8. [Program Flow (NAND Example)](#program-flow-nand-example)
+9. [Utilities](#utilities)
+10. [Screenshot](#screenshot)
+
+---
+
+## Overview
 
 <img width="3149" height="832" alt="image" src="https://github.com/user-attachments/assets/2fe6a6e2-3d9b-4196-b92b-4c8df10d7299" />
 
@@ -34,28 +54,6 @@ graph TD
   N5 -->|w9| N7
   N6 -->|w10| N7
 ```
-
-# Neural Network Implementation — Detailed Documentation
-
-This document explains in detail how this C# codebase implements a **feedforward neural network** with **backpropagation** for supervised learning. The example program trains the network to behave like a **NAND logic gate**.
-
----
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Project Structure](#project-structure)
-3. [Core Models](#core-models)
-4. [Activation Functions](#activation-functions)
-5. [Network Construction and Wiring](#network-construction-and-wiring)
-6. [Training Algorithm](#training-algorithm)
-7. [Mathematical Details](#mathematical-details)
-8. [Program Flow (NAND Example)](#program-flow-nand-example)
-9. [Utilities](#utilities)
-
----
-
-## Overview
 
 The implementation is a **fully connected (dense) multilayer perceptron (MLP)**:
 
@@ -101,7 +99,7 @@ Dense linear algebra (inputs, outputs, rows) uses **MathNet.Numerics** (`Matrix<
 - **Properties**:
   - `Layers`: list of `Layer` (input, hidden, output).
   - `Prediction`: output of the last forward pass (single output neuron).
-  - `LossFunction`: optional; not used in the current training loop (loss is hard-coded as squared error).
+  - `LossFunction`: optional; not used in the current training loop.
 - **Constructor**: `NeuralNetwork(List<int> numOfNeuronsInEachLayer)`
   - One integer per layer: e.g. `[2, 2, 2, 1]` → 2 inputs, two hidden layers of 2 neurons, 1 output.
   - Builds each `Layer` with the right number of neurons and connections (see [Layer](#layer)).
@@ -124,7 +122,7 @@ Dense linear algebra (inputs, outputs, rows) uses **MathNet.Numerics** (`Matrix<
   - `Activation`: `IActivationFunction` for this layer.
   - `Bias`: scalar bias (initialized to 0).
   - `Input`, `Output`: pre- and post-activation values.
-  - `LocalDelta`: \(\delta\) in backpropagation (gradient of loss w.r.t. this neuron’s pre-activation).
+  - `LocalDelta`: $\delta$ in backpropagation (gradient of loss w.r.t. this neuron’s pre-activation).
   - `Connections`: list of `Connection` to neurons in the **next** layer.
 - **Constructor**: Creates one neuron with a given activation and a fixed number of `Connection` objects (weights are initialized randomly in `Connection`).
 
@@ -144,12 +142,12 @@ All implement `IActivationFunction`: `Activate(double x)` and `Derivative(double
 
 | Class | Usage | Formula | Derivative |
 |-------|--------|---------|------------|
-| **NoActivation** | Input layer | \(y = x\) | \(1\) |
-| **Tanh** | Hidden layers | \(y = \tanh(x)\) | \(1 - y^2\) |
-| **LogisticSigmoid** | Output layer | \(y = \frac{1}{1+e^{-x}}\) | \(y(1-y)\) |
+| **NoActivation** | Input layer | $y = x$ | $1$ |
+| **Tanh** | Hidden layers | $y = \tanh(x)$ | $1 - y^2$ |
+| **LogisticSigmoid** | Output layer | $y = \frac{1}{1+e^{-x}}$ | $y(1-y)$ |
 
-- **Tanh**: bounds hidden outputs to \((-1, 1)\); helps with gradient behavior in hidden layers.
-- **Sigmoid**: bounds the single output to \((0, 1)\), suitable for a binary target (e.g. logic gate 0/1).
+- **Tanh**: bounds hidden outputs to $(-1, 1)$; helps with gradient behavior in hidden layers.
+- **Sigmoid**: bounds the single output to $(0, 1)$, suitable for a binary target (e.g. logic gate 0/1).
 
 ---
 
@@ -182,7 +180,7 @@ For each **epoch** and each **training row**:
 
 2. **BackwardPass(nn, correctOutput)**  
    - **Output neuron**:  
-     - Loss is squared error: \(\frac{1}{2}(y - t)^2\). Derivative w.r.t. \(y\) is \((y - t)\). The code uses \(2(y - t)\), which corresponds to the derivative of \((y-t)^2\) (no \(\frac{1}{2}\)).  
+     - Loss is squared error: $\frac{1}{2}(y - t)^2$. Derivative w.r.t. $y$ is $(y - t)$. The code uses $2(y - t)$, which corresponds to the derivative of $(y-t)^2$ (no $\frac{1}{2}$).  
      - Chain rule: `LocalDelta = (2 * (prediction - correctOutput)) * Activation.Derivative(Input)`.  
    - **Other layers** (from last hidden back to first):  
      - For each neuron, `LocalDelta = Activation.Derivative(Input) * sum(Weight * TargetNeuron.LocalDelta)` over all outgoing connections.  
@@ -201,49 +199,49 @@ So the loss is implicitly **squared error**; the learning rule is gradient desce
 
 ### Forward pass (single neuron)
 
-\[
+$$
 z = b + \sum_j w_j \, a_j,\qquad a = f(z)
-\]
+$$
 
-- \(b\): bias  
-- \(w_j\): weights from previous layer  
-- \(a_j\): outputs from previous layer  
-- \(f\): activation (Tanh or Sigmoid)  
-- \(z\): `Input`, \(a\): `Output`
+- $b$: bias  
+- $w_j$: weights from previous layer  
+- $a_j$: outputs from previous layer  
+- $f$: activation (Tanh or Sigmoid)  
+- $z$: `Input`, $a$: `Output`
 
 ### Loss and output gradient
 
-\[
+$$
 L = (y - t)^2 \quad\Rightarrow\quad \frac{\partial L}{\partial y} = 2(y - t)
-\]
+$$
 
-With \(y = f(z)\):
+With $y = f(z)$:
 
-\[
+$$
 \frac{\partial L}{\partial z} = \frac{\partial L}{\partial y} \, f'(z) = 2(y - t)\, f'(z)
-\]
+$$
 
 This is the **output neuron’s** `LocalDelta`.
 
 ### Backpropagation (hidden and input layers)
 
-For a neuron with pre-activation \(z\) and activation \(a = f(z)\), and outgoing weights \(w_k\) to neurons with deltas \(\delta_k\):
+For a neuron with pre-activation $z$ and activation $a = f(z)$, and outgoing weights $w_k$ to neurons with deltas $\delta_k$:
 
-\[
+$$
 \delta = f'(z) \sum_k w_k \, \delta_k
-\]
+$$
 
-That sum runs over all connections from this neuron to the next layer; \(\delta_k\) is `TargetNeuron.LocalDelta`.
+That sum runs over all connections from this neuron to the next layer; $\delta_k$ is `TargetNeuron.LocalDelta`.
 
 ### Weight and bias updates
 
-\[
+$$
 w_j \leftarrow w_j - \eta \, \delta_{\text{target}} \, a_j,\qquad b \leftarrow b - \eta \, \delta
-\]
+$$
 
-- \(\eta\): learning rate  
-- \(\delta_{\text{target}}\): `TargetNeuron.LocalDelta` for the connection  
-- \(a_j\): `neuron.Output` (activation of the source neuron)
+- $\eta$: learning rate  
+- $\delta_{\text{target}}$: `TargetNeuron.LocalDelta` for the connection  
+- $a_j$: `neuron.Output` (activation of the source neuron)
 
 ---
 
@@ -293,3 +291,7 @@ This codebase implements a **fully connected MLP** with:
 - Explicit forward pass, backward pass (local deltas), and weight/bias updates in `Program.cs`.  
 
 The NAND example shows how to define inputs/targets as matrices/vectors, train for a fixed number of epochs, and run predictions. The same structure can be reused for other binary or regression tasks by changing the training data and optionally the number of output neurons and loss.
+
+## Screenshot
+
+<img width="1734" height="1487" alt="image" src="https://github.com/user-attachments/assets/614a3aab-fa93-4052-800a-8933a93b5fe0" />
