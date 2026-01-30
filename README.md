@@ -15,7 +15,8 @@ This document explains in detail how this C# codebase implements a **feedforward
 7. [Mathematical Details](#mathematical-details)
 8. [Program Flow (NAND Example)](#program-flow-nand-example)
 9. [Utilities](#utilities)
-10. [Screenshot](#screenshot)
+10. [LinqPad](#linqpad)
+11. [Screenshot](#screenshot)
 
 ---
 
@@ -291,6 +292,23 @@ This codebase implements a **fully connected MLP** with:
 - Explicit forward pass, backward pass (local deltas), and weight/bias updates in `Program.cs`.  
 
 The NAND example shows how to define inputs/targets as matrices/vectors, train for a fixed number of epochs, and run predictions. The same structure can be reused for other binary or regression tasks by changing the training data and optionally the number of output neurons and loss.
+
+---
+
+## Linqpad
+
+[Linqpad](https://www.linqpad.net/) is not just for LINQ queries, but any C#/F#/VB expression, statement block or program. Put an end to those hundreds of Visual Studio Console projects cluttering your source folder and join the revolution of LINQPad scripters and incremental developers.
+
+In the **Linqpad** folder, the files are ready to be run. The interesting part is that you can inspect the variables graphically and produce graphs. For example, you can inspect the neural network as shown in the following screenshot.
+
+<img width="2493" height="1594" alt="image" src="https://github.com/user-attachments/assets/8fe53846-2d2a-4a7d-b98a-d82a50e47b2e" />
+<img width="2095" height="1106" alt="image" src="https://github.com/user-attachments/assets/0892a289-8022-4608-a4ed-f0d15a42747c" />
+
+Also, you can generate graphs. For example, I created this graph to visualise the loss of the neural network.
+
+<img width="2495" height="1593" alt="image" src="https://github.com/user-attachments/assets/cff4549e-1af1-4998-9dc9-2a727de42690" />
+
+---
 
 ## Screenshot
 
