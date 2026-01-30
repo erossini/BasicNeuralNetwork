@@ -1,7 +1,13 @@
-﻿using BasicNeuralNetwork.Models;
+﻿using BasicNeuralNetwork.Extensions;
+using BasicNeuralNetwork.Models;
+using MathNet.Numerics.LinearAlgebra;
 
 var nn = CreateNeuralNetwork(new List<int> { 2, 2, 2, 1 });
 nn = ConnectNeuralNetwork(nn);
+nn.Dump("Neural Network Structure");
+
+var inputs = Matrix<double>.Build.DenseOfArray(new double[,] { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } });
+inputs.Dump("Input Matrix");
 
 /// <summary>
 /// Creates the neural network.
