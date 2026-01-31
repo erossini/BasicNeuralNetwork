@@ -1,6 +1,6 @@
 # Basic Neural Network (NN) Implementation using C#
 
-This document explains in detail how this C# codebase implements a **feedforward neural network** with **backpropagation** for supervised learning. The example program trains the network to behave like a **NAND logic gate**.
+This document explains in detail how this .NET 10 and C# codebase implements a **feedforward neural network** with **backpropagation** for supervised learning. The example program trains the network to behave like a **NAND logic gate**.
 
 ---
 
